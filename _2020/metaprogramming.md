@@ -224,11 +224,11 @@ relatively common standard is [_semantic versioning_](https://semver.org/).
 With semantic versioning, every version number is of the form: major.minor.patch. The rules are: -->
 這樣還並不理想！如果我們發布了一項和安全相關的升級，它並*沒有*影響到任何公開接口（API），但是處於安全的考慮，依賴它的項目都應該立即升級，那應該怎麼做呢？這也是版本號包含多個部分的原因。不同項目所用的版本號其具體含義並不完全相同，但是一個相對比較常用的標準是[語義版本號](https://semver.org/)，這種版本號具有不同的語義，它的格式是這樣的：主版本號.次版本號.補丁號。相關規則有：
 
- <!-- - If a new release does not change the API, increase the patch version.
- - If you _add_ to your API in a backwards-compatible way, increase the
-   minor version.
- - If you change the API in a non-backwards-compatible way, increase the
-   major version. -->
+<!-- - If a new release does not change the API, increase the patch version.
+- If you _add_ to your API in a backwards-compatible way, increase the
+  minor version.
+- If you change the API in a non-backwards-compatible way, increase the
+  major version. -->
  - 如果新的版本沒有改變 API ，請將補丁號遞增；
  - 如果您添加了 API 並且該更動是向下相容的，請將次版本號遞增；
  - 如果您修改了 API 但是它並不向下相容，請將主版本號遞增。
@@ -307,15 +307,15 @@ quickly mention some approaches to testing and testing terminology that
 you may encounter in the wild: -->
 多數的大型軟體都有“測試套件”。您可能已經對測試的相關概念有所了解，但是我們覺得有些測試方法和測試術語還是應該再次提醒一下：
 
- <!-- - Test suite: a collective term for all the tests
- - Unit test: a "micro-test" that tests a specific feature in isolation
- - Integration test: a "macro-test" that runs a larger part of the
-   system to check that different feature or components work _together_.
- - Regression test: a test that implements a particular pattern that
-   _previously_ caused a bug to ensure that the bug does not resurface.
- - Mocking: the replace a function, module, or type with a fake
-   implementation to avoid testing unrelated functionality. For example,
-   you might "mock the network" or "mock the disk". -->
+<!-- - Test suite: a collective term for all the tests
+- Unit test: a "micro-test" that tests a specific feature in isolation
+- Integration test: a "macro-test" that runs a larger part of the
+  system to check that different feature or components work _together_.
+- Regression test: a test that implements a particular pattern that
+  _previously_ caused a bug to ensure that the bug does not resurface.
+- Mocking: the replace a function, module, or type with a fake
+  implementation to avoid testing unrelated functionality. For example,
+  you might "mock the network" or "mock the disk". -->
  - 測試套件：所有測試的統稱。
  - 單元測試：一個“微觀測試”，用於對某個封裝的特性進行測試。
  - 集成測試：一個“宏觀測試”，針對系統的某一大部分進行，測試其不同的特性或組件是否能*協同*工作。
@@ -331,34 +331,33 @@ you may encounter in the wild: -->
     A number of other very common make targets are listed
     [here](https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets). -->
 1. 大多數的 makefiles 都提供了一個名為 `clean` 的構建目標，這並不是說我們會生成一個名為 `clean` 的文件，而是我們可以使用它清理文件，讓 make 重新構建。您可以理解為它的作用是“撤銷”所有構建步驟。在上面的makefile 中為 `paper.pdf` 實現一個 `clean` 目標。您需要構建 [phony](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html)。您也許會發現 [`git ls-files`](https://git-scm.com/docs/git-ls-files) 子命令很有用。其他一些有用的make 構建目標可以在[這裡](https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets)找到。
-   
- <!-- 2. Take a look at the various ways to specify version requirements for
-    dependencies in [Rust's build
-    system](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html).
-    Most package repositories support similar syntax. For each one
-    (caret, tilde, wildcard, comparison, and multiple), try to come up
-    with a use-case in which that particular kind of requirement makes
-    sense. -->
+<!-- 2. Take a look at the various ways to specify version requirements for
+  dependencies in [Rust's build
+  system](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html).
+  Most package repositories support similar syntax. For each one
+  (caret, tilde, wildcard, comparison, and multiple), try to come up
+  with a use-case in which that particular kind of requirement makes
+  sense. -->
 2. 指定版本要求的方法很多，讓我們學習一下[Rust的構建系統](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html)的依賴管理。大多數的包管理倉庫都支持類似的語法。對於每種語法(插入符、波浪號、萬用字元、比較、乘積)，構建一種場景使其具有實際意義。
- <!-- 3. Git can act as a simple CI system all by itself. In `.git/hooks`
-    inside any git repository, you will find (currently inactive) files
-    that are run as scripts when a particular action happens. Write a
-    [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit) hook
-    that runs `make paper.pdf` and refuses the commit if the `make`
-    command fails. This should prevent any commit from having an
-    unbuildable version of the paper. -->
+<!-- 3. Git can act as a simple CI system all by itself. In `.git/hooks`
+  inside any git repository, you will find (currently inactive) files
+  that are run as scripts when a particular action happens. Write a
+  [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit) hook
+  that runs `make paper.pdf` and refuses the commit if the `make`
+  command fails. This should prevent any commit from having an
+  unbuildable version of the paper. -->
 3. Git 可以作為一個簡單的 CI 系統來使用，在任何 git 倉庫中的`.git/hooks` 目錄中，您可以找到一些文件（當前處於未啟用狀態），它們的作用和腳本一樣，當某些事件發生時便可以自動執行。請編寫一個 [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit) hook，當執行 `make` 命令失敗後，它會執行 `make paper.pdf` 並拒絕您的提交。這樣做可以避免產生包含不可構建版本的提交信息。
- <!-- 4. Set up a simple auto-published page using [GitHub
-    Pages](https://help.github.com/en/actions/automating-your-workflow-with-github-actions).
-    Add a [GitHub Action](https://github.com/features/actions) to the
-    repository to run `shellcheck` on any shell files in that
-    repository (here is [one way to do
-    it](https://github.com/marketplace/actions/shellcheck)). Check that
-    it works! -->
+<!-- 4. Set up a simple auto-published page using [GitHub
+  Pages](https://help.github.com/en/actions/automating-your-workflow-with-github-actions).
+  Add a [GitHub Action](https://github.com/features/actions) to the
+  repository to run `shellcheck` on any shell files in that
+  repository (here is [one way to do
+  it](https://github.com/marketplace/actions/shellcheck)). Check that
+  it works! -->
 4. 基於 [GitHub Pages](https://help.github.com/en/actions/automating-your-workflow-with-github-actions) 創建任意一個可以自動發布的頁面。添加一個 [GitHub Action](https://github.com/features/actions) 到該倉庫，對倉庫中的所有shell 文件執行`shellcheck` ([方法之一](https://github.com/marketplace/actions/shellcheck))。
- <!-- 5. [Build your own](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/building-actions)
-    GitHub action to run [`proselint`](http://proselint.com/) or
-    [`write-good`](https://github.com/btford/write-good) on all the
-    `.md` files in the repository. Enable it in your repository, and
-    check that it works by filing a pull request with a typo in it. -->
+<!-- 5. [Build your own](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/building-actions)
+  GitHub action to run [`proselint`](http://proselint.com/) or
+  [`write-good`](https://github.com/btford/write-good) on all the
+  `.md` files in the repository. Enable it in your repository, and
+  check that it works by filing a pull request with a typo in it. -->
 5. [構建屬於您的](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/building-actions) GitHub action，對倉庫中所有的 `.md ` 文件執行 [`proselint`](http://proselint.com/) 或 [`write-good`](https://github.com/btford/write-good)，在您的倉庫中開啟這一功能，提交一個包含錯誤的文件看看該功能是否生效。
